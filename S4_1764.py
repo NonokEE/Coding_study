@@ -5,7 +5,16 @@ N, M = map(int, ip().split())
 listenman = []
 listenlook = []
 
+def binsearch(t, l, s, e):
+    if s > e: return None
+    m = (s+e)//2
+    if t == l[m]: return m
+    if t > l[m]: return binsearch(t, l, m+1, e)
+    elif t < l[m]: return binsearch(t, l, s, m-1)
+
 for i in range(N): listenman.append(str(ip().strip()))
+listenman.sort()
+
 for i in range(M):
     lookman = str(ip().strip())
     if lookman in listenman: listenlook.append(lookman)
@@ -27,8 +36,13 @@ N은 그냥 받으면 되고, M 추가될 때 마다 N에서 탐색하면 되는
 받는게 사전순이 아님에 유의
 
 방법1. 그냥 in으로 찾아보기. 근데 시간 제한에 걸리겠지?
-방법2. N을 사전순으로 정렬하고, 퀵소트 구현해서 해보기
+방법2. N을 사전순으로 정렬하고, 이진 탐색 구현해서 해보기
 
 일단 귀찮으니까 방법 1부터 시도.
+
+--2트--
+네 당연히 시간 제한 걸리구연
+이진 탐색 구현해서 합시다.
+만약 이거 안되면 소트도 퀵소트로. 근데 파이썬 소트도 괜찮지 않나?
 
 '''
