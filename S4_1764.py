@@ -5,6 +5,15 @@ N, M = map(int, ip().split())
 listenman = []
 listenlook = []
 
+def quicksort(l):
+    if len(l) <= 1: return l
+    pivot = l[len(l)//2]
+    lt, gt = [], []
+    for item in l:
+        if   item < pivot: lt.append(item)
+        elif item > pivot: gt.append(item)
+    return quicksort(lt) + [pivot] + quicksort(gt)
+
 def binsearch(t, l, s, e):
     if s > e: return None
     m = (s+e)//2
@@ -13,13 +22,13 @@ def binsearch(t, l, s, e):
     elif t < l[m]: return binsearch(t, l, s, m-1)
 
 for i in range(N): listenman.append(str(ip().strip()))
-listenman.sort()
+listenman = quicksort(listenman)
 
 for i in range(M):
     lookman = str(ip().strip())
     if lookman in listenman: listenlook.append(lookman)
 
-listenlook.sort()
+listenlook = quicksort(listenlook)
 print(len(listenlook))
 for i in range(len(listenlook)): print(listenlook[i])
 
@@ -44,5 +53,9 @@ N은 그냥 받으면 되고, M 추가될 때 마다 N에서 탐색하면 되는
 네 당연히 시간 제한 걸리구연
 이진 탐색 구현해서 합시다.
 만약 이거 안되면 소트도 퀵소트로. 근데 파이썬 소트도 괜찮지 않나?
+
+--3트--
+이게 시간 초과하네
+퀵소트까지 해보고 안되면 방법적인 문제.
 
 '''
