@@ -2,33 +2,17 @@ import sys
 ip = sys.stdin.readline
 
 N, M = map(int, ip().split())
-listenman = []
+listenman = {}
 listenlook = []
 
-def quicksort(l):
-    if len(l) <= 1: return l
-    pivot = l[len(l)//2]
-    lt, gt = [], []
-    for item in l:
-        if   item < pivot: lt.append(item)
-        elif item > pivot: gt.append(item)
-    return quicksort(lt) + [pivot] + quicksort(gt)
-
-def binsearch(t, l, s, e):
-    if s > e: return None
-    m = (s+e)//2
-    if t == l[m]: return m
-    if t > l[m]: return binsearch(t, l, m+1, e)
-    elif t < l[m]: return binsearch(t, l, s, m-1)
-
-for i in range(N): listenman.append(str(ip().strip()))
-listenman = quicksort(listenman)
-
+for i in range(N): 
+    temp = str(ip().strip())
+    listenman[temp] = temp
 for i in range(M):
-    lookman = str(ip().strip())
-    if lookman in listenman: listenlook.append(lookman)
+    try:  listenlook.append(listenman[str(ip().strip())])
+    except: pass
 
-listenlook = quicksort(listenlook)
+listenlook.sort()
 print(len(listenlook))
 for i in range(len(listenlook)): print(listenlook[i])
 
@@ -57,5 +41,11 @@ N은 그냥 받으면 되고, M 추가될 때 마다 N에서 탐색하면 되는
 --3트--
 이게 시간 초과하네
 퀵소트까지 해보고 안되면 방법적인 문제.
+
+--4트--
+방법적인 문제가 맞다.
+해시를 써볼까?
+
+이게 맞았다.
 
 '''
