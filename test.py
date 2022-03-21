@@ -1,6 +1,6 @@
 import sys
 ip = sys.stdin.readline
 
-a = [[1,2,3], [4,5,6], [7,8,9]]
-b = [a[i][:2] for i in range(2)]
-print(b)
+a = {'a' : 5, 'b': 10, 'c' : 15}
+print('a' in a.keys())
+print(list(a.values()))
