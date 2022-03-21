@@ -4,23 +4,20 @@ ip = sys.stdin.readline
 T = int(ip())
 
 def DFS(curx, cury, farm, visited, cabbage):
-    if [curx, cury] in visited: return
-    if farm[curx][cury] == 0: return
-    else:
-        visited.append([curx, cury])
-        cabbage.remove([curx, cury])
-        # LEFT
-        if curx > 0:
-            DFS(curx-1, cury, farm, visited, cabbage)
-        # RIGHT
-        if curx < len(farm)-1:
-            DFS(curx+1, cury, farm, visited, cabbage)
-        # UP
-        if cury > 0:
-            DFS(curx, cury-1, farm, visited, cabbage)
-        # DOWN
-        if cury < len(farm[0])-1:
-            DFS(curx, cury+1, farm, visited, cabbage)
+    visited.append([curx, cury])
+    cabbage.remove([curx, cury])
+    # LEFT
+    if curx > 0:
+        if ([curx-1, cury] not in visited) and farm[curx-1][cury]: DFS(curx-1, cury, farm, visited, cabbage)
+    # RIGHT
+    if curx < len(farm)-1:
+        if ([curx+1, cury] not in visited) and farm[curx+1][cury]:DFS(curx+1, cury, farm, visited, cabbage)
+    # UP
+    if cury > 0:
+        if ([curx, cury-1] not in visited) and farm[curx][cury-1]:DFS(curx, cury-1, farm, visited, cabbage)
+    # DOWN
+    if cury < len(farm[0])-1:
+        if ([curx, cury+1] not in visited) and farm[curx][cury+1]:DFS(curx, cury+1, farm, visited, cabbage)
 
 
 for _ in range(T):
@@ -59,4 +56,8 @@ for _ in range(T):
 탐색한 땅은 배추땅에서 제거.
 남은 배추땅으로 가서 또 심고 DFS.
 배추땅 길이 0 될때 까지 반복.
+
+--2트-- : 이래도 재귀가 터진다고요?
+재귀가 터져버림. DFS에서 일단 보내고 방문 여부 찾지 말고, 방문여부를 먼저 찾고 DFS 보낼지 말지 결정해야 함.
+어차피 DFS 시작을 무조건 배추땅에서 하니까, farm 여부도 미리 보고 보내자.
 '''
