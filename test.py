@@ -1,6 +1,6 @@
 import sys
 ip = sys.stdin.readline
 
-a = {'a' : 5, 'b': 10, 'c' : 15}
-print('a' in a.keys())
-print(list(a.values()))
+a = [[1,2], [3,4], [5,6]]
+a.remove([1,2])
+print(a)
