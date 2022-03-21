@@ -1,5 +1,5 @@
 import sys
 ip = sys.stdin.readline
 
-n = 25
-print(n**(1/2) == 5)
+i = '66466'
+print('666' in i)

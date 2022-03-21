@@ -2,10 +2,28 @@ import sys
 ip = sys.stdin.readline
 
 N = int(ip())
+adj =[[0 for _ in range(N)] for _ in range(N)]
+
 L = int(ip())
 
+for _ in range(L):
+    one, two = map(int, ip().split())
+    adj[one-1][two-1] = 1
+    adj[two-1][one-1] = 1
 
+count = 0
+visited = [0 for _ in range(N)]
 
+def DFS(cur):
+    global count
+    if visited[cur] == 0:
+        visited[cur] = 1
+        count += 1
+        for i in range(N):
+            if adj[cur][i] == 1: DFS(i)
+
+DFS(0)
+print(count-1)
 
 '''
 한 컴퓨터가 웜에 걸리면, 그 컴퓨터와 네트워크 상 연결되어 있는 모든 컴퓨터는 웜에 걸린다.
