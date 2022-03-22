@@ -13,35 +13,34 @@ for _ in range(M):
 for key in adj_list: adj_list[key] = list(set(adj_list[key]))
 
 #DFS
-visited = [0 for _ in range(N+1)]
+visited = []
 stk = [V]
 
 while stk:
     cur = stk.pop()
-    if not visited[cur]: print(cur, end=" ")
-    visited[cur] = 1
+    visited.append(cur)
     
     for vertex in adj_list[cur]:
-        if not visited[vertex]: 
-            stk.append(cur)
+        if vertex not in visited + stk: 
             stk.append(vertex)
             break
+        
+for i in range(len(visited)-1): print(visited[i], end=" ")
 print()
 
 #BFS
-visited = [0 for _ in range(N+1)]
+visited = []
 q = [V]
 
 while q:
     cur = q.pop(0)
-    print(cur, end=" ")
-    visited[cur] = 1
+    visited.append(cur)
 
     for vertex in adj_list[cur]:
-        if not visited[vertex]:
+        if vertex not in visited + q:
             q.append(vertex)
-            visited[vertex] = 1
-print()
+
+for i in range(len(visited)-1): print(visited[i], end=" ")
 
 
 
@@ -55,7 +54,7 @@ print()
 
 첫째 줄에 DFS 순서대로 출력, 둘째 줄에 BFS 순서대로 출력.
 
---1트-- : 결과
+--1트-- : 틀림
 인접 리스트(딕셔너리)를 만들자. 이 때 양방향 추가, 중복 제거, 결과배열 정렬 해줘야 함. -> set으로 해결.
 재귀 돌리면 터진다는걸 알았으니까
 
@@ -68,4 +67,10 @@ BFS -> 큐
    add, update로 추가하고, remove로 제거.
    인덱싱이 안되기 때문에 다시 리스트로 바꿔서 써야 한다.
    리스트에서 중복 제거 및 정렬을 하고 싶으면 set으로 바꿨다가 다시 list로 바꿔주면 굿.
+
+--2트-- : 틀림
+구현이 잘못됨.
+
+--3트-- : 
+졸려
 '''
