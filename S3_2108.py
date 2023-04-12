@@ -5,18 +5,12 @@ n = int(ip())
 numbers = []
 for i in range(n): numbers.append(int(ip()))
 
-print("---")
 # 산술평균
-ans = sum(numbers)/n
-
-if (abs(ans*10) - abs(int(ans)*10)) >= 5: 
-    if ans>0: ans += 1
-    else    : ans -= 1
-print(int(ans))
+print(round(sum(numbers)/n))
 
 # 중앙값
 numbers.sort()
-print(numbers[int(n/2)])
+print(numbers[n//2])
 
 # 최빈값
 field = [0 for _ in range(8001)]    # [0번 필드 = -4000] ~ [4000번 필드 = 0] ~ [8000번 필드 = 4000] ::: v
@@ -57,4 +51,12 @@ print(numbers[n-1] - numbers[0])
 
 그런데 말입니다? 범위가 +- 4000밖에 안되는데 그냥 필드를 만드는게 낫지 않을까요~?
 일단은 가능한 무식한 방법으로 해보죠.
+
+--2트--: 뭐여 그것도 아니네
+아마 산술평균 반올림하는거에서 틀린 것 같은데요
+반올림이 round가 기본으로 있구나!!!!!!
+
+--3트--:
+최빈값이랑 범위 중에서 틀린건데 범위는 진짜 절대 아닐거고
+야이 바보야 print("---") 안지웠잖아
 '''
