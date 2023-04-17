@@ -1,2 +1,4 @@
-a = [1,2,3,4]
-print(a.pop(0))
+a = [[1,2],[3,4],[5,6]]
+
+for x,y in a:
+    print(x,y)
