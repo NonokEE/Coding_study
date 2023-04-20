@@ -2,10 +2,10 @@ import sys
 ip = sys.stdin.readline
 
 n = int(ip())
-len_s = int(ip())
+m = int(ip())
 s = list(" ".join((ip().strip())).split())
 
-for i in range(len_s):
+for i in range(m):
     if s[i] == 'I': s[i] = 1
     else          : s[i] = 0
 
@@ -20,9 +20,10 @@ def automata(listinput:list, n: int):
     return False
 
 count = 0
-for i in range(len_s - 2*n - 1):
+for i in range(m - 2*n):
     if s[i] == 1:
-        if automata(s[i: i + (2*n) +1], n): count += 1
+        if automata(s[i: i + (2*n) +1], n): 
+            count += 1
 
 print(count)
 
@@ -47,10 +48,15 @@ P1인데 IOIOI면 2개 들어간거임.
 3. 끗
 
 PN의 길이는 2N+1이므로, S의 끝에서 2N+1 이후 부터는 순회할 필요 없다.
-len_s - n 까지만 루프.
+m - n 까지만 루프.
 
 0123456
 1010101 7
 101 3
+
+--2트--: 50점
+경계값이 이상하네
+1 3 IOI면 1이잖아? s 입력은 잘 들어가는데 오토마타가 뭐가 이상한듯
+순회 범위가 틀렸네요~
 
 '''
