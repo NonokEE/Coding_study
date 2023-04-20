@@ -1,2 +1,3 @@
-a = [[1,1,1],[2,2,2]]
-print(a.count(1))
+for i in range(5):
+    print(i)
+    i = 4
