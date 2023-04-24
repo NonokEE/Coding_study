@@ -1,2 +1,7 @@
 a = []
-a.pop()
+
+def gg(a:list, b):
+    a.append(b)
+
+gg(a, 1)
+print(a)

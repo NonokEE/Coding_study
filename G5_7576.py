@@ -9,56 +9,45 @@ ip = sys.stdin.readline
 m, n = map(int, ip().split())
 field = [list(map(int, ip().split())) for _ in range(n)]
 
-##초기화##
-day = 0
-buffer = []
-for i in range(n):
-    for j in range(m):
-        if field[i][j] == 1:
-            buffer.append((i,j))
+dx = [-1,1,0,0]
+dy = [0,0,-1,1]
 
-old_zeros = 99999999
-zeros = 0
-for line in field: zeros += line.count(0)
+def BFS(field:list, start_coord):
+    queue = [start_coord]
 
-dx = [-1,1,0,0] #상하
-dy = [0,0,-1,1] #좌우
-
-##루프##
-
-flag = True # 토마토 전부 순회가 가능한 경우 True, 불가능하면 False
-
-while zeros>0:
-
-    temp_buffer = []
-
-    while buffer:
-
-        x, y = buffer.pop()
+    while queue:
+        x, y = queue.pop()
 
         for i in range(4):
             cx = x + dx[i]
             cy = y + dy[i]
 
-            if (0 <= cx < n) and (0 <= cy < m) and field[cx][cy] == 0:
-                temp_buffer.append((cx,cy))
-                field[cx][cy] = (day+1)
+            if (0 <= cx < n) and (0 <= cy < m) and field[cx][cy] >= 0:      # 영역 내에 있고, 토마토가 있는 구역일 때(익었는지 여부는 상관 없음)
+                if (field[cx][cy] == 0) or (field[cx][cy] > field[x][y]):   # 아직 익지 않은 땅이거나, 비효율적으로 익은 구역이라면 갱신.
+                    field[cx][cy] = field[x][y] + 1
+                    queue.append((cx,cy))                  
 
-    buffer = temp_buffer
+start = []
+for i in range(n):
+    for j in range(m):
+        if field[i][j] == 1:
+            start.append((i,j))
 
-    old_zeros = zeros
-    zeros = 0
-    for line in field: zeros += line.count(0)
+for s in start:
+    BFS(field, s)
 
-    if zeros == old_zeros:
+flag = True
+day = 0
+
+for line in field:
+    if 0 in line: 
         flag = False
         break
+    if max(line) > day:
+        day = max(line)
 
-    day += 1
-
-if flag: print(day)
+if flag: print(day-1)
 else   : print(-1)
-
 
 ''' 틈메이러
 M*N크기 격자 상자에 토마토를 하나씩 넣어서 보관한다.
@@ -75,6 +64,12 @@ M*N크기 격자 상자에 토마토를 하나씩 넣어서 보관한다.
 어떻게 해도 토마토가 모두 익지 못하는 경우는 -1 출력
 
 시간 1초 메모리 256MB
+
+--2트--: 또 시간 초과
+그냥 저번에 아파트 단지처럼 모든 칸에 대해서 BFS하는게 나을 것 같은데?
+한번 싹 돌리고 나서 결과에 0이 있으면 -1출력하면 그만이고, 그냥 최댓값 출력하면 됨
+
+대신 퍼지는 영역이 중첩될 수도 있는데, 그 때는 더 작은 값이 이기도록 하면 됨
 
 --1트--: 시간 초과
 모두 익지 못하는 경우가 있어서 BFS 한방에 알 수는 없을 것 같고, 단지 문제처럼 가능한 모든 칸에 시행해봐야 할 것 같음.
