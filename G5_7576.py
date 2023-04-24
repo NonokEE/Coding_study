@@ -5,6 +5,8 @@ def pfield(field:list):
         print()
 ###
 import sys
+from collections import deque
+
 ip = sys.stdin.readline
 m, n = map(int, ip().split())
 field = [list(map(int, ip().split())) for _ in range(n)]
@@ -12,42 +14,34 @@ field = [list(map(int, ip().split())) for _ in range(n)]
 dx = [-1,1,0,0]
 dy = [0,0,-1,1]
 
-def BFS(field:list, start_coord):
-    queue = [start_coord]
+queue = deque([])
+for i in range(n):
+    for j in range(m):
+        if field[i][j] == 1:
+            queue.append((i,j))
 
+def BFS():
     while queue:
-        x, y = queue.pop()
+        x, y = queue.popleft()
 
         for i in range(4):
             cx = x + dx[i]
             cy = y + dy[i]
 
-            if (0 <= cx < n) and (0 <= cy < m) and field[cx][cy] >= 0:      # 영역 내에 있고, 토마토가 있는 구역일 때(익었는지 여부는 상관 없음)
-                if (field[cx][cy] == 0) or (field[cx][cy] > field[x][y]):   # 아직 익지 않은 땅이거나, 비효율적으로 익은 구역이라면 갱신.
-                    field[cx][cy] = field[x][y] + 1
-                    queue.append((cx,cy))                  
+            if (0 <= cx < n) and (0 <= cy < m) and field[cx][cy] == 0:      
+                field[cx][cy] = field[x][y] + 1
+                queue.append((cx,cy))     
 
-start = []
-for i in range(n):
-    for j in range(m):
-        if field[i][j] == 1:
-            start.append((i,j))
+BFS()                   
 
-for s in start:
-    BFS(field, s)
-
-flag = True
 day = 0
-
 for line in field:
-    if 0 in line: 
-        flag = False
-        break
-    if max(line) > day:
-        day = max(line)
-
-if flag: print(day-1)
-else   : print(-1)
+    for e in line:
+        if e == 0:
+            print(-1)
+            exit(0)
+    day = max(max(line), day)
+print(day-1)
 
 ''' 틈메이러
 M*N크기 격자 상자에 토마토를 하나씩 넣어서 보관한다.
@@ -64,6 +58,12 @@ M*N크기 격자 상자에 토마토를 하나씩 넣어서 보관한다.
 어떻게 해도 토마토가 모두 익지 못하는 경우는 -1 출력
 
 시간 1초 메모리 256MB
+
+--3트--:
+지금 방식은 엄밀하게는 BFS가 아니다
+왜냐? 1로 시작했던 부분들 개별적으로 BFS를 시행하니까 전체적으로는 BFS가 아님
+전체적으로 BFS를 하면 개별 BFS를 할 때처럼 겹치는 영역을 검사할 필요도 없어서 필요없는 연산을 줄일 수 있음.
+1로 시작하는 부분을 전부 BFS 큐에 넣어주면 그게 BFS 1단계 루프인 셈이다.
 
 --2트--: 또 시간 초과
 그냥 저번에 아파트 단지처럼 모든 칸에 대해서 BFS하는게 나을 것 같은데?
