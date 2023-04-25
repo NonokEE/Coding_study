@@ -1,7 +1,10 @@
-a = []
+a = [1,2,3,4]
+b = a
+b.pop()
+print(a)
 
-def gg(a:list, b):
-    a.append(b)
+def afa(l:list):
+    l.pop()
 
-gg(a, 1)
+afa(b)
 print(a)
