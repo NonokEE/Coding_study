@@ -2,7 +2,7 @@ import sys
 ip = sys.stdin.readline
 
 ''' 문제 제목
-시간 1초 메모리 128MB
+시간 N초 메모리 NNNMB
 
 문제 내용
 
