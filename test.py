@@ -1,4 +1,2 @@
-a = '1234'
-a = list(a)
-a[0] = 'a'
-print(a)
+a,b,c = map(int, input().split())
+print(a, b, c)
