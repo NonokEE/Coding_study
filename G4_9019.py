@@ -35,21 +35,25 @@ for _ in range(int(ip())):
     field = [False for _ in range(10000)] #False = 미개척지
 
     # BFS 초기화
-    bfs_queue = deque([a])
+    step = [a]
     field[a] = ''
 
     # BFS 시작
     while field[b] == False:
-        cur = bfs_queue.popleft()
-        arr = [funcD(cur), funcS(cur), funcL(cur), funcR(cur)]
+        temp = []
 
-        for i in range(4):
-            next = arr[i]
-            func = func_name[i]
+        for cur in step:
+            arr = [funcD(cur), funcS(cur), funcL(cur), funcR(cur)]
 
-            if field[next] == False: # 미개척지인 경우에만 갱신 진행
-                field[next] = field[cur] + func
-                bfs_queue.append(next)
+            for i in range(4):
+                next = arr[i]
+                func = func_name[i]
+
+                if field[next] == False:
+                    field[next] = field[cur] + func      
+                    temp.append(next)
+
+        step = list(set(temp))
                  
     print(field[b])
 ''' DSLR
@@ -72,8 +76,15 @@ R: 각 자릿수를 오른편으로 회전. 1234 -> 4123
 첫 줄에 tc개수 t
 각 tc에 출발지 A랑 목적지 B
 
---4트--:
-함수 최적화의 문제가 아닌 것 같음
+--5트--:
+
+
+--4트--: TO
+함수 최적화의 문제가 아닌 것 같음.
+완전 열린 필드라서 쓸데없는 수를 너무 많이 두는게 문제인데
+경찰과 도둑이랑 비슷한 문제라고 봤는데..
+뎁스 뭉탱이로 보자. 한 뎁스 안에서 중복되는 경우가 생겨서 비효율적인 수가 생길 수 있음.
+큐를 안쓰고 loop 단위로 보면 됨
 
 --3트--: TO
 BFS는 맞을텐데... 너무 무식하게 가는 감은 있음
