@@ -1,2 +1,3 @@
-a,b,c = map(int, input().split())
-print(a, b, c)
+a = 1e9
+
+print(a)
