@@ -47,14 +47,10 @@ for _ in range(int(ip())):
             next = arr[i]
             func = func_name[i]
 
-            if field[next] == False:   # 탐색한 적 없는 경우 새 값만 만들어주면 됨
+            if field[next] == False: # 미개척지인 경우에만 갱신 진행
                 field[next] = field[cur] + func
                 bfs_queue.append(next)
-            else : # 탐색한 적 있는 경우, 비교하고 갱신
-                if len(field[next]) > len(field[cur]) + 1: # 기존 경로가 더 비효율적인 경우 새 경로로 갱신
-                    field[next] = field[cur] + func
-                    bfs_queue.append(next)
-            
+                 
     print(field[b])
 ''' DSLR
 시간 6초 메모리 256MB
@@ -76,7 +72,16 @@ R: 각 자릿수를 오른편으로 회전. 1234 -> 4123
 첫 줄에 tc개수 t
 각 tc에 출발지 A랑 목적지 B
 
---1트--: 
+--4트--:
+함수 최적화의 문제가 아닌 것 같음
+
+--3트--: TO
+BFS는 맞을텐데... 너무 무식하게 가는 감은 있음
+어차피 이게 뎁스 단위로 뻗어가는거기 때문에 더 비효율적인 경우가 웬만해선 없음 -> ㄴㄴ 절대 없음. 
+이미 값이 있으면 갱신할 필요가 없다 이말이다. BFS에 대한 이해도 부족이었음.
+갱신 안하는 식으로 바꿔도 안되면 함수 LR에 덱 안쓰는 식으로 최적화 ㄱㄱ
+
+--1트--: TO
 그냥 내용이 복잡해서 그렇게 결국 이것도 BFS임.
 일단 전처리는 전부 str로 해주는게 좋아보이고 -> 굳이?
 필드 저장을 [값, 경로]로 저장하게 하자.
