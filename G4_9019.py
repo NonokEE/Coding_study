@@ -7,55 +7,46 @@ def funcD(e):
     return (e*2)%10000
 
 def funcS(e):
-    if e > 0 : 
-        return e-1
-    else: 
-        return 9999
-
-def int_to_deque(e):
-    e = deque(str(e))
-    while len(e) < 4:
-        e.appendleft('0')
-    return e
+    return (e-1)%10000
 
 def funcL(e):
-    e = int_to_deque(e)
-    e.append(e.popleft())
-    return int("".join(e))
+    head = e//1000
+    body = e%1000
+    return body*10 + head
 
 def funcR(e):
-    e = int_to_deque(e)
-    e.appendleft(e.pop())
-    return int("".join(e))
+    front = e//10
+    tail = e%10
+    return tail*1000 + front
 
 func_name = ['D','S','L','R']
 
 for _ in range(int(ip())):
     a, b = map(int, ip().split())
-    field = [False for _ in range(10000)] #False = 미개척지
+    visited = [False for _ in range(10000)] #False = 미개척지
 
     # BFS 초기화
-    step = [a]
-    field[a] = ''
+    bfs_queue = deque([[a, ""]])
+    visited[a] = True
 
     # BFS 시작
-    while field[b] == False:
-        temp = []
+    while bfs_queue:
+        cur, path = bfs_queue.popleft()
+        arr = [funcD(cur), funcS(cur), funcL(cur), funcR(cur)]
 
-        for cur in step:
-            arr = [funcD(cur), funcS(cur), funcL(cur), funcR(cur)]
+        if cur == b:
+            print(path)
+            break
 
-            for i in range(4):
-                next = arr[i]
-                func = func_name[i]
+        for i in range(4):
+            next = arr[i]
+            func = func_name[i]
 
-                if field[next] == False:
-                    field[next] = field[cur] + func      
-                    temp.append(next)
-
-        step = list(set(temp))
+            if visited[next] == False: # 미개척지인 경우에만 갱신 진행
+                visited[next] = True
+                bfs_queue.append([next, path + func])
                  
-    print(field[b])
+                 
 ''' DSLR
 시간 6초 메모리 256MB
 
@@ -76,8 +67,17 @@ R: 각 자릿수를 오른편으로 회전. 1234 -> 4123
 첫 줄에 tc개수 t
 각 tc에 출발지 A랑 목적지 B
 
---5트--:
+--6트--: 아니 내가 맞았어 이건 억까야
+결과 횟수가 중요한게 아니고, 과정이 중요한 거니까 필드를 남기지 말라 이거지?
+네... 
+필드 없어도 되긴 하는구나. 필드 매번 초기화해주고 접근하느라 시간 남는 것 같기도.
+사실 필드가 너무 넓어서 빈땅이 너무 많으니까 낭비긴 해. 그냥 빈 땅에 줄 그으면서 간다고 생각하는게 낫나보다.
 
+! list에서 in은 O(n)인데, set에서 in은 O(1)이란다. 개신기하네. 딕셔너리로 구현되나?
+
+--5트--: TO
+너무 넓어... 어떻게 최적화하지
+BFS가 아닌거 아니야? 아 설마 진짜로 LR때문에 문제가 생기는 거라고? 근데 그럴만 하긴 해..
 
 --4트--: TO
 함수 최적화의 문제가 아닌 것 같음.
