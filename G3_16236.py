@@ -1,102 +1,66 @@
 def pfield(arr):
-    for line in arr: 
-        for e in line:
-            if e == 1e9:
-                print("%4s"%"INF", end=" ")
-            else:
-                print("%4d"%e, end= " ")
-        print()
-    print()
+    for line in arr: print(line)
 ##
 import sys
 ip = sys.stdin.readline
 
 from collections import deque
 
+INF = 999
 n = int(ip())
-field = [list(map(int, ip().split())) for _ in range(n)]
+field = [[[0,0] for _ in range(n)] for _ in range(n)]  #왼쪽 값은 필드 정보, 오른쪽 값은 상어로부터의 거리
 
-dx = [0,0,-1,1]
-dy = [-1,1,0,0]
+# 필드 정보 입력받기
+for i in range(n):
+    line = list(map(int, ip().split()))
+    for j in range(n):
+        field[i][j][0] = line[j]
+        if line[j] == 9:
+            sx, sy = i, j
 
-##
+###
 # 상어의 좌표, (먹을 수 있는 물고기들 좌표)를 반환
 def seek(shk_size):
     res = deque([])
     for i in range(n):
         for j in range(n):
-            if (field[i][j] != 0) and (field[i][j] < shk_size):
+            if (field[i][j][0] != 0) and (field[i][j][0] < shk_size):
                 res.append((i,j))
-            if field[i][j] == 9:
-                shark = (i,j)
-    return shark, res
-
-# 현재 지도 기반 임시 지도 만들기(큰 물고기를 벽(1e9)으로, 나머지는 무시)
-def get_temp_field(shk_size):
-    res = []
-    for i in range(n):
-        line = []
-        for j in range(n):
-            if   field[i][j] == 9      : line.append(0)
-            elif field[i][j] > shk_size: line.append(1e9)
-            else                       : line.append(0)
-        res.append(line)
     return res
 
-# 범위 안에 있니?
-def is_in_field(x, y):
-    return (0 <= x < n) and (0 <= y < n)
+# 거리정보 갱신
+def set_distance(shk_size, dest):
+    #dest = 상어가 도착할 위치의 x,y
+    for i in range(n):
+        for j in range(n):
+            cur = field[i][j][0]
+            if cur == 9 :
+                field[i][j][1] = 0
+            elif cur > shk_size: 
+                field[i][j][1] = INF
+            else:
+                field[i][j][1] = abs(dest[0] - i) + abs(dest[1] - j)
+###
 
-# BFS 진행하여 결과 필드 반환 (출발점이 2가 되긴 하는데 어차피 먹이 위치는 아니라 상관 없음)
-def BFS(depart, shk_size):
-    # BFS 전 초기화
-    arr = get_temp_field(shk_size)
+# 루프 전 초기화
+shk_size = 2
+shk_stomach = 0
+step = 0
 
-    step_queue = deque([depart])
-    step = 0
+set_distance(shk_size, (sx, sy))
+foods = seek(shk_size)
 
-    # BFS 시작
-    while step_queue:
-        temp_queue = deque([])
-
-        while step_queue:
-            x, y = step_queue.popleft()
-
-            for i in range(4):
-                cx = x + dx[i]
-                cy = y + dy[i]
-
-                if is_in_field(cx,cy) and arr[cx][cy] == 0:
-                    arr[cx][cy] = step+1
-                    temp_queue.append((cx,cy))
-
-        step_queue = temp_queue    
-        step += 1
-
-    return arr
-##
-
-#루프 전 초기화
-shk_size = 2    #초기 상어 크기 2
-shk_stomach = 0 #상어 뱃속 뇸뇸
-
-step = 0        #결과값
-shark, dest = seek(shk_size) #초기 상어 위치, 목적지 설정
-
-#루프 시작
-while dest: #목적지가 존재하면 루프 진행
-
-    #현재 상어 위치 기반으로 BFS 진행하여 맵 받아오기
-    bfs_field = BFS(shark, shk_size) 
+# 루프
+while foods: #먹을 수 있는게 있는 동안 루프 진행
 
     #먹이 후보들까지 가는데 걸리는 거리 산출
     food_distance = []
-    for x, y in dest:
-        food_distance.append(bfs_field[x][y])
+    for x, y in foods:
+        food_distance.append(field[x][y][1])
 
     #가장 가까운 거리의 먹이 먹기 (!)1e9라면 도달 불가능한 먹이
     min_dist = min(food_distance)
-    if min_dist == 1e9: #도달 불가능한 경우
+    if min_dist == INF: #도달 불가능한 경우
         break
     else:
         #먹을 고기의 좌표 찾기
@@ -105,25 +69,27 @@ while dest: #목적지가 존재하면 루프 진행
             if food_distance[i] == min_dist:
                 index = i
                 break
-        food_x, food_y = dest[index]    
+        food_x, food_y = foods[index]    
 
         #스텝 갱신하고 배 불리기
-        step += bfs_field[food_x][food_y]
+        step += field[food_x][food_y][1]
         shk_stomach += 1
         if shk_stomach == shk_size:
             shk_size += 1
             shk_stomach = 0
 
         #상어 위치 갱신
-        sx, sy = shark
-
-        field[sx][sy] = 0
-        field[food_x][food_y] = 9
+        field[sx][sy][0] = 0
+        field[food_x][food_y][0] = 9
+        sx, sy = food_x, food_y
 
         #지도 갱신
-        shark, dest = seek(shk_size)
+        set_distance(shk_size, (sx,sy))
+        foods = seek(shk_size)
 
 print(step)
+
+
 ''' 애기 상어
 시간 2초 메모리 512MB
 
@@ -151,7 +117,11 @@ N*N 필드에 물고기 M마리랑 애기상어 1마리가 있다. 한 칸에 �
 둘째부터 공간 상태.
 0은 빈칸, 1~6은 물고기 크기, 9는 애기상어 위치
 
-
+--2트--:
+로직 자체는 맞는데, 시간 아낄 방법을 생각해보자.
+상어가 위치 옮길 때 마다 BFS쓰는 게 좀 비효율적일 것 같음
+BFS를 최초 1회만 하고, 그 다음부터는 위치 갱신만 하는게?
+근데 그럴라면 일반 필드랑 BFS필드를 합쳐야될 것 같음.
 
 --1트--: 시간초과
 
