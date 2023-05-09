@@ -2,109 +2,41 @@ import sys
 ip = sys.stdin.readline
 
 n = int(ip())
-field = []
 
-last_maxindex = 1
-last_max = 0
-total_max = 0
+temp_max = [0,0,0]
+temp_min = [0,0,0]
 
-last_minindex = 1
-last_min = 0
-total_min = 0
-
-last_center = 0
+total_max = [0,0,0]
+total_min = [0,0,0]
 
 for _ in range(n):
     cur = list(map(int, ip().split()))
 
-    #최대값이 여러 개 있으면 가급적 가운데 것 선택
-    maxval = max(cur)
-    minval = min(cur)
-
+    #현재 각 3개를 숫자에 대하여, 이전 회차를 고려하여 최선의 선택지를 고름
     for i in range(3):
-        if cur[i]==maxval:
-            maxind = i
-            if i==1:
-                break
-    for i in range(3):
-        if cur[i]==minval:
-            minind = i
-            if i==1:
-                break
+    
+        #첫번째를 고른 경우 이전루프의 0 또는 1중 선택
+        if i == 0 :
+            total_max[0] = cur[0] + max(temp_max[0], temp_max[1])
+            total_min[0] = cur[0] + min(temp_min[0], temp_min[1])
 
-    ## 최댓값
-    # 이전에 1이었으면 현재 중에서 아무거나 뽑으면 된다.
-    if last_maxindex == 1:
-        last_maxindex = maxind
-        last_max = maxval
-        total_max += last_max
+        #두번쨰를 고른 경우 셋 중 선택
+        elif i == 1:
+            total_max[1] = cur[1] + max(temp_max[0], temp_max[1], temp_max[2])
+            total_min[1] = cur[1] + min(temp_min[0], temp_min[1], temp_min[2])
 
-    # 이전에 양끝값이었으면 
-    else:
-        # 현재 뽑을게 같거나 1이면 그대로 가도 된다.
-        if (maxind == 1) or (maxind == last_maxindex):
-            last_maxindex = maxind
-            last_max = maxval
-            total_max += last_max
-
-        #반대쪽을 뽑아야 하는 경우, 반대쪽 빼고 최대값 + 이전회차 최대값 vs 최댓값 + 이전회차 가운데. 같으면 전자 선택
+        #세번째 -> 1빼고 선택
         else:
-            if maxind == 0: temp_maxval = max(cur[:2])
-            else          : temp_maxval = max(cur[1:])
+            total_max[2] = cur[2] + max(temp_max[1], temp_max[2])
+            total_min[2] = cur[2] + min(temp_min[1], temp_min[2])
 
-            #현재 최고값을 포기하는게 나은 경우
-            if (temp_maxval + last_max) >= maxval + last_center:
-                last_maxindex = cur.index(temp_maxval)
-                last_max = temp_maxval
-                total_max += last_max
+    #루프 거치고 나면 total배열에는 현재 입력된 각 숫자 + 이전회차 중 가장 나은 선택지 저장됨. 갱신
+    temp_max = total_max[:]
+    temp_min = total_min[:]
 
-            #이전걸 바꿔주는게 나은 경우)
-            else:
-                total_max -= last_max
+#최종적으로 남은 숫자들에서 최고값만 출력하면 됨.
+print(max(total_max), min(total_min))
 
-                last_maxindex = maxind
-                last_max = maxval
-                total_max += last_center
-                total_max += maxval
-
-    ## 최솟값
-    # 이전에 1이었으면 현재 중에서 아무거나 뽑으면 된다.
-    if last_minindex == 1:
-        last_minindex = minind
-        last_min = minval
-        total_min += last_min
-
-    # 이전에 양끝값이었으면 
-    else:
-        # 현재 뽑을게 같거나 1이면 그대로 가도 된다.
-        if (minind == 1) or (minind == last_minindex):
-            last_minindex = minind
-            last_min = minval
-            total_min += last_min
-
-        #반대쪽을 뽑아야 하는 경우, 반대쪽 빼고 최대값 + 이전회차 최대값 vs 최댓값 + 이전회차 가운데. 같으면 전자 선택
-        else:
-            if minind == 0: temp_minval = min(cur[:2])
-            else          : temp_minval = min(cur[1:])
-
-            #현재 최고값을 포기하는게 나은 경우
-            if (temp_minval + last_min) >= minval + last_center:
-                last_minindex = cur.index(temp_minval)
-                last_min = temp_minval
-                total_min += last_min
-
-            #이전걸 바꿔주는게 나은 경우)
-            else:
-                total_min -= last_min
-
-                last_minindex = minind
-                last_min = minval
-                total_min += last_center
-                total_min += minval
-
-    last_center = cur[1]
-
-print(total_max, total_min)
 
 
 ''' 내려가기
@@ -120,6 +52,14 @@ N줄에 0이상 9이하의 숫자가 3개씩 적혀있다.
 - 입력 -
 첫 줄에 N
 다음부터 N번째 줄의 숫자 3개
+
+--2트--:
+이전거 한번만 고려하면 안되려나
+메모리가 터질 일은 없으니까 방법이 잘못된건데
+
+조건문이 길어지면 틀린다. 100줄 넘어가면 뭔가 잘못된거임.
+한번만 비교하는건 아무래도 상관 없을 것 같은데,
+그냥 매 회차마다 비교를 해버리는게?
 
 --1트--: 틀렸습니다~!
 이것도 DP인데 어떻게 머리를 쓰느냐..
