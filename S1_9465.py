@@ -1,9 +1,7 @@
 import sys
 ip = sys.stdin.readline
 
-tc = int(ip())
-
-for _ in range(tc):
+for _ in range(int(ip())):
     n = int(ip())
     stickers = [list(map(int,ip().split()))for _ in range(2)]
 
@@ -13,8 +11,8 @@ for _ in range(tc):
 
     for i in range(n):
         if i > 0:
-            dp[0] = stickers[0][i] + max(stickers[1][i-1] + last2[0], last2[1])
-            dp[1] = stickers[1][i] + max(stickers[0][i-1] + last2[1], last2[0])
+            dp[0] = stickers[0][i] + max(last1[1], last2[1])
+            dp[1] = stickers[1][i] + max(last1[0], last2[0])
         else:
             dp[0] = stickers[0][0]
             dp[1] = stickers[1][0]
@@ -40,10 +38,18 @@ for _ in range(tc):
 - 출력-
 TC별로 최대값 출력
 
+--2트--:
+쭉 지그재그로 가느냐 하나 건너 뛴 지그재그냐의 차이
+1트도 방법이 맞긴 한데, 복잡하게 생각하다가 뭘 실수한듯. 예외가 생기는 경우가 있나봐
+
+인터넷에서 본 것들은 저렇게 필드가 주어져버리면 아예 필드를 갱신시키는 쪽으로 함
+메모리 아낄 수 있고 assign시간도 아낄 수 있어서 좋은 듯.
+다른 문제들은 한줄 한줄 입력이 들어오니까 실시간 갱신이 효율적인데, 
+이 문제는 가로로 입력이 들어와서 필드 초기화부터 해줘야 되니까 그런듯
+
 --1트--: 틀?
 피라미드나 RGB같은거에서 했듯이, 경우의 수를 모두 모양으로 만들어줘야됨
 
 - 지금것 1열 + 이전것 2열 + 그전것 1열
 - 지금것 1열 + 그전것 2열
-
 '''
