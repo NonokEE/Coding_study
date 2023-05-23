@@ -1,44 +1,28 @@
 import sys
 ip = sys.stdin.readline
 
-from collections import deque
-
 N = int(ip())
-tree = {}          # tree[n] = n의 부모
-child = set([])    # 누군가의 자식인 노드들.
-queue = deque([])  # 숫자쌍 큐
+graph = {i:[] for i in range(1, N+1)} #인접리스트
 
-# 입력큐 초기화
 for _ in range(N-1):
-    queue.append(tuple(map(int, ip().split())))
+    n1, n2 = map(int, ip().split())
+    graph[n1].append(n2)
+    graph[n2].append(n1)
 
-# 루프
-while queue:
-    n1, n2 = queue.popleft()
+res = [0 for _ in range(N+1)]         #탐색결과 저장용. res[i] = i의 부모
+visited = [False for _ in range(N+1)]
+dfs_stack = [1]
 
-    # 한쪽이 1인 경우는 바로 트리에 삽입 가능
-    if n1 == 1: 
-        tree[n2] = 1
-        child.add(n2)
-    elif n2 == 1:
-        tree[n1] = 1
-        child.add(n1)
-
-    # 아닌 경우, a가 누군가의 자식이라면 a는 b의 부모.
-    else:
-        if n1 in child:
-            tree[n2] = n1
-            child.add(n2)
-        elif n2 in child:
-            tree[n1] = n2
-            child.add(n1)
-
-        # 양 쪽 다 자식이 아니라면 보류
-        else:
-            queue.append((n1, n2))
+while dfs_stack:
+    cur = dfs_stack.pop()
+    visited[cur] = True
+    for child in graph[cur]:
+        if not visited[child]:
+            dfs_stack.append(child)
+            res[child] = cur
 
 for i in range(2, N+1):
-    print(tree[i])
+    print(res[i])
 
 ''' 트리의 부모 찾기
 시간 1초 메모리 256MB
@@ -53,7 +37,11 @@ for i in range(2, N+1):
 2번노드부터 끝 노드까지 부모 출력
 (1번은 루트니까 출력 없습니다)
 
---4트--:
+--4트--: 클
+이거 입력이 너무 많을 수 있어서 저렇게 루프 돌리면 터질 가능성 농후함.
+일단 입력은 그래프로 다 받고 거기서부터 찾는게 낫다.
+
+입력에서 부모자식 구분이 안되니까 연결정보를 양쪽에 넣어주고, 중복만 아니면 됨.
 
 --3트--: 시간초과
 저 로직으로는 누락이 되는 경우가 있다는거임
