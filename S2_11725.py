@@ -1,35 +1,44 @@
 import sys
 ip = sys.stdin.readline
 
+from collections import deque
+
 N = int(ip())
-tree = {}         # tree[n] = n의 부모
-parent = set([1]) # 누군가의 부모인 노드들. 1이 루트니까 무조건 넣고 시작
-child = set([])   # 누군가의 자식인 노드들.
+tree = {}          # tree[n] = n의 부모
+child = set([])    # 누군가의 자식인 노드들.
+queue = deque([])  # 숫자쌍 큐
 
+# 입력큐 초기화
 for _ in range(N-1):
-    n1, n2 = map(int, ip().split())
+    queue.append(tuple(map(int, ip().split())))
 
-    if n1 in parent: #n1이 부모인 경우
-        tree[n2] = n1
-        parent.add(n1)
+# 루프
+while queue:
+    n1, n2 = queue.popleft()
+
+    # 한쪽이 1인 경우는 바로 트리에 삽입 가능
+    if n1 == 1: 
+        tree[n2] = 1
         child.add(n2)
-    elif n2 in parent: #n2가 부모인 경우
-        tree[n1] = n2
-        parent.add(n2)
+    elif n2 == 1:
+        tree[n1] = 1
         child.add(n1)
-    else: #어느 쪽도 부모가 아닌 경우, 누군가의 자식인 쪽이 부모가 됨
-        if n1 in child:# n1이 부모
+
+    # 아닌 경우, a가 누군가의 자식이라면 a는 b의 부모.
+    else:
+        if n1 in child:
             tree[n2] = n1
-            parent.add(n1)
             child.add(n2)
-        else:# n1이 부모
+        elif n2 in child:
             tree[n1] = n2
-            parent.add(n2)
             child.add(n1)
 
-for e in sorted(list(tree.items())):
-    print(e[1])
+        # 양 쪽 다 자식이 아니라면 보류
+        else:
+            queue.append((n1, n2))
 
+for i in range(2, N+1):
+    print(tree[i])
 
 ''' 트리의 부모 찾기
 시간 1초 메모리 256MB
@@ -44,8 +53,24 @@ for e in sorted(list(tree.items())):
 2번노드부터 끝 노드까지 부모 출력
 (1번은 루트니까 출력 없습니다)
 
---3트--:
+--4트--:
 
+--3트--: 시간초과
+저 로직으로는 누락이 되는 경우가 있다는거임
+12345 이렇게 들어오는건 맞는데, 중간에 누군가가 부모 입력이 안된다는거지.
+
+12
+56
+이면 56은 어디로 들어가야됨? 
+그리고 56에서 5가 부모라고 하더라도 6이 자식이라는 보장은 없음. 6이 5의 부모일 수도 있다.
+
+즉 저 로직으로 공란이 생기는 이유가, 부모자식 구분이 제대로 안돼서 트리에 추가되지 않고 갱신된다는거임.
+'a가 누군가의 부모면 b는 a의 자식이다' 이 부분이 잘못됨.
+'a가 누군가의 자식이면 a는 b의 부모다' 이건 성립함.
+
+두번째 식으로 가능하면 넣어준다. 아니라면 후순위로 밀어서 다시 시도.
+단, 둘 중에 1이 있다면 걔는 무조건 1이 부모니까 그냥 넣어주면 된다.
+될때까지 넣는다.
 
 --2트--: 왜 틀?
 키 에러가 났다는건 상정 못한 경우가 있다는건데 그게 가능해?
