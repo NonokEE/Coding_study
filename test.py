@@ -1,3 +1,5 @@
-a = "{{2},{2,1},{2,1,3},{2,1,3,4}}"
+from collections import deque
 
-print(a.split("}"))
+a = deque([1,2,3])
+b = [5,6]
+print(a + deque(b))
