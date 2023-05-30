@@ -1,16 +1,48 @@
 import time
-n = 50000
+from collections import deque
+n = 10000
+print("n = %d"%n)
+# +
+s = time.time()
+a = []
+for i in range(n):
+    temp = []
+    for j in range(n):
+        temp += [0]
+    a.append(temp)
+e = time.time()
+print("temp += [0]: %f"%(e-s))
 
-#2.6359684467315674
-s1 = time.time()
+# append
+s = time.time()
+a = []
+for i in range(n):
+    temp = []
+    for j in range(n):
+        temp.append(0)
+    a.append(temp)
+e = time.time()
+print("append(list): %f"%(e-s))
+
+# deque append
+s = time.time()
+a = deque([])
+for i in range(n):
+    temp = []
+    for j in range(n):
+        temp.append(0)
+    a.append(temp)
+e = time.time()
+print("append(deque): %f"%(e-s))
+
+# for for
+s = time.time()
 a = [[0 for _ in range(n)] for _ in range(n)]
-e1 = time.time()
-print(e1-s1)
+e = time.time()
+print("for for: %f"%(e-s))
 
-# 0.9696991443634033
-s2 = time.time()
+# * for
+s = time.time()
 a = [[0]*n for _ in range(n)]
-e2 = time.time()
-print(e2-s2)
-
-print((e1-s1)/(e2-s2))
+e = time.time()
+print(" *  for: %f"%(e-s))
