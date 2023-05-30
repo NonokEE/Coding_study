@@ -26,12 +26,14 @@ minus = len(nums)
 for i in range(len(oper)):
     if oper[i] == '-':
         minus = i
+        break
 
-res = nums[0]
-for i in range(1,minus):
+res = 0
+
+for i in range(min(len(nums), minus+1)):
     res += nums[i]
-for i in range(minus, len(nums)-1):
-    res -= nums[i+1]
+for i in range(minus+1, len(nums)):
+    res -= nums[i]
 
 print(res)
 
@@ -51,6 +53,10 @@ print(res)
 
 - 출력-
 괄호를 적당히 쳤을 때의 최솟값을 출력
+
+--2트--:
+10+100-10+100-100-100
+이론은 맞는데 알고리즘을 잘못 짠듯?
 
 --1트--: 틀
 일단 파싱은 센스것 하시고,
