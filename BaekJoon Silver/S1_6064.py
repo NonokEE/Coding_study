@@ -1,30 +1,16 @@
 import sys
 ip = sys.stdin.readline
 
-tc = int(ip())
-for _ in range(tc):
+for _ in range(int(ip())):
     m, n, x, y = map(int, ip().split())
-    remainder_list = []
-    remainder = 0
-    i = 0
-
-    while 1:
-        remainder = (m*i+x-y)%n
-
-        if remainder == 0: 
-            flag = True    #나누어 떨어짐을 나타내는 플래그
+    k = x
+    while k <= (m*n):
+        if (k-x) % m == 0 and (k-y) % n == 0:
+            print(k)
             break
-        else             : 
-            if remainder not in remainder_list:  #나머지 중복이 없으면 계속 탐색
-                remainder_list.append(remainder)    
-                remainder = 0
-            else: #나머지 중복 발생시 중단
-                flag = False
-                break
-        i += 1
-
-    if flag: print(m*i+x)
-    else   : print(-1)
+        k += m
+    else:
+        print(-1)
 
 
 ''' 카잉 달력
@@ -44,6 +30,9 @@ M:10, N=12라면 첫 해는 1:1, 11번째 해는 1:11, 3:1은 13번쨰 해. 마�
 이후 T개동안 M N x y가 주어짐
 
 시간 1초, 메모리 256MB
+
+--3트--: 공부했습니다~
+중국어방 뭐시기를 내가 어캐 알아요
 
 --2트--
 무한루프 함부로 쓰지 마라
