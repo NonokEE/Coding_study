@@ -57,3 +57,4 @@ MEMO: </br>
 ---
 
 2023-06-01: Programmers Skill Check Lv.3: t2 - 92.9 </br>
+2023-06-02: 1504
