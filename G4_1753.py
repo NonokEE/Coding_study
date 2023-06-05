@@ -12,7 +12,7 @@ for _ in range(E):
     except:
         adj_list[u][v] = w
 
-#diikstra
+#dijkstra
 import heapq
 INF = sys.maxsize
 
