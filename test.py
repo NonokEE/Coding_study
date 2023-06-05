@@ -1,4 +1,2 @@
-
-import sys
-
-print(sys.maxsize)
+a = {1:{1:5, 2:2}}
+print(a[1][1])
