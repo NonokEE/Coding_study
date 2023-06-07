@@ -1,33 +1,81 @@
 import sys
+import time
 ip = sys.stdin.readline
 
-V, E = map(int, ip().split())
-K = int(ip())
+timescale = 1
+iteration = 100000
 
-adj_list = {i:{} for i in range(V+1)}
-for _ in range(E):
-    u, v, w = map(int, ip().split())
-    try: adj_list[u][v] = min(w, adj_list[u][v])
-    except: adj_list[u][v] = w
+N = int(ip())
+adj_list = {i:{} for i in range(N)}
 
-# dijkstra
-import heapq         #루프에서 최단거리를 사용하기 위해 힙을 import
+for _ in range(N-1):
+    parent, child, weight = map(int, ip().split())
+    parent -= 1
+    child -= 1
+    adj_list[parent][child] = weight
+    adj_list[child][parent] = weight
+"""
+## DFS case
+def DFS (s):
+    stack = [(s, 0)]
+    visited = [False] * N
+
+    res_node = 0
+    res_cost = 0
+    while stack:
+        cur, val = stack.pop()
+        
+        if val > res_cost:
+            res_cost = val
+            res_node = cur
+
+        if not visited[cur]:
+            visited[cur] = True
+            for child in adj_list[cur].keys():
+                if not visited[child]:
+                    stack.append((child, val + adj_list[cur][child]))
+
+    return (res_cost, res_node)
+###
+starttime = time.time() * timescale
+for _ in range(iteration):
+    cost1, next_node = DFS(0)
+    cost2, _ = DFS(next_node)
+    endtime = time.time() * timescale
+print("DFS: " + str(endtime - starttime))
+"""
+
+## Dijkstra case
+
+import heapq
 INF = sys.maxsize
 
-cost = [INF] * (V+1) #cost[i] = 시작점부터 i까지 가는데 걸리는 weight. 전부 INF로 초기화하고 시작
-cost[K] = 0          #시작점만 0으로 초기화한다.
-heap = []
-heapq.heappush(heap, (0, K)) # heap의 내용은 (weight, V), 특정 루트에서 V까지 가는데 weight만큼 걸린다는 의미.
+def Dijkstra(s):
+    cost = [INF] * N
+    cost[s] = 0
+    
+    heap = []
+    heapq.heappush(heap, (0, s))
 
-while heap:
-    cur_weight, cur_node = heapq.heappop(heap)   #힙으로 pop하기 때문에 weight가 가장 작은것이 pop된다.
+    while heap:
+        val, cur = heapq.heappop(heap)
 
-    if cur_weight > cost[cur_node]: #지금 꺼낸 값은 과거시점이고, 다른 루프에서 cost값이 갱신되어있을 수 있다. 
-        continue                    #갱신된 값이 과거시점의 현재값보다 작다면 현재값은 쓸모없다.
+        if val > cost[cur]:
+            continue
 
-    for another_node in adj_list[cur_node]: #현재 노드들로부터 다른 노드까지 가는데 걸리는 weight를 갱신
-        if cost[another_node] > cur_weight + adj_list[cur_node][another_node]: #다른 노드의 현재 값과, 지금의 노드에서 가중치를 더한 값을 비교
-            cost[another_node] = cur_weight + adj_list[cur_node][another_node] #cost를 갱신해주고
-            heapq.heappush(heap, (cost[another_node], another_node))           #현재루프 시점에서의 최저값과 목적지를 힙에 push
+        for child in adj_list[cur].keys():
+            if cost[child] > val + adj_list[cur][child]:
+                cost[child] = val + adj_list[cur][child]
+                heapq.heappush(heap, (cost[child], child))
 
-print(cost) 
+    maxval = max(cost)
+    maxind = cost.index(maxval)
+
+    return (maxval, maxind)
+
+starttime = time.time() * timescale
+for _ in range(iteration):
+    cost1, next_node = Dijkstra(0)
+    cost2, _ = Dijkstra(next_node)
+    endtime = time.time() * timescale
+print("Dijkstra: " + str(endtime - starttime))
