@@ -13,14 +13,16 @@ for _ in range(N-1):
 
 def DFS (s):
     stack = [(s, 0)]
-    visited = [False for _ in range(N)]
+    visited = [False] * N
 
-    res = 0
+    res_node = 0
+    res_cost = 0
     while stack:
         cur, val = stack.pop()
         
-        if val > res:
-            res = val
+        if val > res_cost:
+            res_cost = val
+            res_node = cur
 
         if not visited[cur]:
             visited[cur] = True
@@ -28,10 +30,11 @@ def DFS (s):
                 if not visited[child]:
                     stack.append((child, val + adj_list[cur][child]))
 
-    return res
+    return (res_cost, res_node)
 
-vals = [DFS(i) for i in range(N)]
-print(max(vals))
+cost1, next_node = DFS(0)
+cost2, _ = DFS(next_node)
+print(cost2)
 
 
 ''' 트리의 지름
@@ -47,7 +50,12 @@ print(max(vals))
 - 출력-
 트리의 지름을 출력
 
---2트--:
+--3트--:
+모든 노드에서 DFS 돌릴거면 다익스트라써도 사실 똑같은거잖아? 정답은 맞을거야 시간이 문제지.
+결론적으로는 사이거리가 가장 긴 노드 쌍을 찾으면 되는데, 이걸 DFS로 어캐하지?
+가장 먼 것을 하나 찾고, 거기서 가장 먼걸 찾는다? 
+
+--2트--: 시간 초과
 그래 너무 많아.. 메모리 안걸려도 어차피 시간에서 걸렸을듯
 각 노드에 다 돌려서 가장 긴거 찾는건 똑같은데, 알고리즘 자체의 필요조건을 이해하고 있느냐의 차이
 플로이드워셜은 너무 자원이 많이 들고, 다익스트라는 너무 오래 걸림.
