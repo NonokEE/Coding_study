@@ -1,3 +1,3 @@
-a = [1,2,3,4]
-for x,y in a:
-    print(x, y)
+for i in range(10):
+    print(i)
+    if i == 5: break
