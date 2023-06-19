@@ -2,21 +2,19 @@ import sys
 ip = sys.stdin.readline
 
 N, P, Q = map(int, ip().split())
+dp = {0:1}
 
-stack = [N]
-count = 0
-
-while stack:
-    cur = stack.pop()
-    if cur == 0:
-        count += 1
-    elif cur == 1:
-        count += 2
+def rec(n):
+    if n in dp:
+        return dp[n]
     else:
-        stack.append(int(cur/P))
-        stack.append(int(cur/Q))
+        dp[n] = rec(n//P) + rec(n//Q)
+        return dp[n]
 
-print(count)
+print(rec(N))
+
+
+
 ''' 무한 수열
 시간 2초 메모리 128MB
 
@@ -31,7 +29,8 @@ N P Q를 줄테니까 AN을 구해라
 AN
 
 --3트--:
-재귀로 하면 걸리는 케이스가 있는거 같음.
+재귀가 맞긴 한데, 이미 있는 값을 다시 계산해서 쓰는게 손해니까 그 부분에 DP를 쓰는거잖아?
+어떤 연속적인 계산에 DP를 응용하는 예인듯.
 
 --2트--:
 안되넹 너무 무식한가
