@@ -1,5 +1,11 @@
 # Coding_study </br>
 
+> 2024년 1월 2일부터 메모 및 수행기록은 [노션](https://nonokee.notion.site/Algorithm-90bc56406c004290844aadef161e8fc7?pvs=4)에 정리함</br>
+깃허브에는 최종 제출본만 업로드.
+
+<details>
+<summary>과거 기록</summary>
+
 WIP: </br>
 LT: 1260 16236 6064 </br>
 MEMO: </br>
@@ -64,3 +70,5 @@ MEMO: </br>
 2023-06-09: 11404 </br>
 2023-06-19: 1351 </br>
 2023-06-20: 1354 </br>
+
+</details>
