@@ -1,4 +1,5 @@
 #include <iostream>
+#include <typeinfo>
 using namespace std;
 
 int main()
@@ -6,5 +7,11 @@ int main()
     ios::sync_with_stdio(false);
     cin.tie(NULL); cout.tie(NULL);
 
-    return 0;
+    string test = "123456789";
+    for (auto iter = test.begin() ; iter != test.end(); ++ iter)
+    {
+        cout << *iter + '0' << endl;
+        
+    }
+    
 }
