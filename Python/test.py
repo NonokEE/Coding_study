@@ -1,3 +1,3 @@
-for i in range(10):
-    print(i)
-    if i == 5: break
+a = [1,2,3]
+b = [3,2,1]
+print(a<b)
