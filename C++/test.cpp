@@ -7,11 +7,9 @@ int main()
     ios::sync_with_stdio(false);
     cin.tie(NULL); cout.tie(NULL);
 
-    string test = "123456789";
-    for (auto iter = test.begin() ; iter != test.end(); ++ iter)
+    for(int i = 0 ; i < 26 ; i ++)
     {
-        cout << *iter + '0' << endl;
-        
+        printf("%c ", i + 'A');
     }
     
 }
