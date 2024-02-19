@@ -1,3 +1,3 @@
-a = [1,2,3]
-b = [3,2,1]
-print(a<b)
+a = [list(map(int, input())) for _ in range(9)]
+for line in a:
+    print(line)
