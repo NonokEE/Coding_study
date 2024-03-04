@@ -1,3 +1,2 @@
-a = {}
-a[1]=2
-print(2 in a)
+print(ord("a"))
+print(ord("z"))
