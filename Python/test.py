@@ -1,2 +1,4 @@
-a = {5:4, 7:8, 8:1, 3:2}
-print(list(a))
+import sys
+print(sys.maxsize)
+
+print(2**31-1)
