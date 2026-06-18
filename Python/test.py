@@ -1,4 +1,5 @@
-import sys
-print(sys.maxsize)
+import sys;
+ip = sys.stdin.readline()
 
-print(2**31-1)
+a = '1010'
+print(int(a,2))
